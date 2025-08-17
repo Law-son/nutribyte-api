@@ -1,0 +1,268 @@
+{
+  "nutrientReferenceData": [
+    {
+      "nutrient": "Energy",
+      "unit": "kcal/day",
+      "description": "Calories required to maintain health and support daily activities.",
+      "benefits": "Provides energy for metabolic processes, physical activity, and growth.",
+      "deficiencyEffects": "Fatigue, weight loss, impaired immunity.",
+      "excessEffects": "Weight gain, obesity, increased risk of metabolic diseases.",
+      "rda": [
+        {
+          "ageRange": "19-30 male",
+          "activityLevel": "moderate",
+          "value": 2700
+        },
+        {
+          "ageRange": "19-30 female",
+          "activityLevel": "moderate",
+          "value": 2200
+        }
+      ],
+      "ul": null,
+      "source": "FAO/WHO Human Energy Requirements – adapted to West African populations"
+    },
+    {
+      "nutrient": "Protein",
+      "unit": "g/day",
+      "description": "Macronutrient essential for muscle repair, enzyme production, and immune function.",
+      "benefits": "Supports growth, tissue repair, immune health.",
+      "deficiencyEffects": "Muscle wasting, weakened immunity, delayed wound healing.",
+      "excessEffects": "Possible kidney strain in susceptible individuals.",
+      "rda": [
+        {
+          "ageRange": "19-30 male",
+          "activityLevel": "moderate",
+          "value": 56
+        },
+        {
+          "ageRange": "19-30 female",
+          "activityLevel": "moderate",
+          "value": 46
+        }
+      ],
+      "ul": null,
+      "source": "WHO Protein and Amino Acid Requirements – Ghana food context"
+    },
+    {
+      "nutrient": "Vitamin A",
+      "unit": "µg/day",
+      "description": "Fat-soluble vitamin important for vision, immune function, and skin health.",
+      "benefits": "Maintains healthy eyesight, supports immunity.",
+      "deficiencyEffects": "Night blindness, increased infection risk.",
+      "excessEffects": "Toxicity symptoms like headaches, liver damage.",
+      "rda": [
+        {
+          "ageRange": "19-30 male",
+          "activityLevel": "moderate",
+          "value": 900
+        },
+        {
+          "ageRange": "19-30 female",
+          "activityLevel": "moderate",
+          "value": 700
+        }
+      ],
+      "ul": 3000,
+      "source": "WHO/FAO Vitamin A guidelines for sub-Saharan Africa"
+    },
+    {
+      "nutrient": "Iron",
+      "unit": "mg/day",
+      "description": "Mineral vital for oxygen transport and energy metabolism.",
+      "benefits": "Prevents anemia, supports cognitive performance.",
+      "deficiencyEffects": "Iron-deficiency anemia, fatigue, poor concentration.",
+      "excessEffects": "Iron overload, organ damage.",
+      "rda": [
+        {
+          "ageRange": "19-30 male",
+          "activityLevel": "moderate",
+          "value": 8
+        },
+        {
+          "ageRange": "19-30 female",
+          "activityLevel": "moderate",
+          "value": 18
+        }
+      ],
+      "ul": 45,
+      "source": "WHO Nutrient Requirements – Africa Region"
+    },
+    {
+      "nutrient": "Sodium",
+      "unit": "mg/day",
+      "description": "Electrolyte that regulates fluid balance and nerve function.",
+      "benefits": "Maintains fluid balance, supports muscle and nerve function.",
+      "deficiencyEffects": "Rare – may cause hyponatremia symptoms like confusion, seizures.",
+      "excessEffects": "High blood pressure, increased heart disease risk.",
+      "rda": [
+        {
+          "ageRange": "19-30 male",
+          "activityLevel": "moderate",
+          "value": 1500
+        },
+        {
+          "ageRange": "19-30 female",
+          "activityLevel": "moderate",
+          "value": 1500
+        }
+      ],
+      "ul": 2300,
+      "source": "WHO Sodium Intake Guidelines for Adults"
+    },
+    {
+      "nutrient": "Vitamin C",
+      "unit": "mg/day",
+      "description": "Water-soluble vitamin important for immune function, antioxidant defense, and collagen synthesis.",
+      "benefits": "Boosts immunity, improves iron absorption from plant-based meals like waakye and red-red.",
+      "deficiencyEffects": "Scurvy, poor wound healing, fatigue.",
+      "excessEffects": "Diarrhea, kidney stone risk.",
+      "rda": [
+        {
+          "ageRange": "19-30 male",
+          "activityLevel": "moderate",
+          "value": 90
+        },
+        {
+          "ageRange": "19-30 female",
+          "activityLevel": "moderate",
+          "value": 75
+        }
+      ],
+      "ul": 2000,
+      "source": "WHO Vitamin C Requirements – Adapted for West Africa"
+    },
+    {
+      "nutrient": "Fat",
+      "unit": "g/day",
+      "description": "Macronutrient essential for energy storage, hormone production, and absorption of fat-soluble vitamins (A, D, E, K).",
+      "benefits": "Provides concentrated energy, supports cell structure, aids absorption of vitamins.",
+      "deficiencyEffects": "Dry skin, poor vitamin absorption, hormonal imbalance.",
+      "excessEffects": "Weight gain, increased risk of heart disease (especially from saturated and trans fats).",
+      "rda": [
+        {
+          "ageRange": "19-30 male",
+          "activityLevel": "moderate",
+          "value": 70
+        },
+        {
+          "ageRange": "19-30 female",
+          "activityLevel": "moderate",
+          "value": 60
+        }
+      ],
+      "ul": null,
+      "source": "WHO/FAO Dietary Fats Guidelines – Adapted for West African populations"
+    },
+    {
+      "nutrient": "Carbohydrates",
+      "unit": "g/day",
+      "description": "Primary source of energy for the body, especially the brain and muscles during activity.",
+      "benefits": "Supports brain function, provides fuel for daily activities, spares protein for tissue repair.",
+      "deficiencyEffects": "Low energy, mental fatigue, muscle breakdown.",
+      "excessEffects": "Weight gain, increased risk of metabolic diseases when from refined sources.",
+      "rda": [
+        {
+          "ageRange": "19-30 male",
+          "activityLevel": "moderate",
+          "value": 310
+        },
+        {
+          "ageRange": "19-30 female",
+          "activityLevel": "moderate",
+          "value": 260
+        }
+      ],
+      "ul": null,
+      "source": "WHO/FAO Carbohydrate Requirements – Adapted for West Africa"
+    },
+    {
+      "nutrient": "Fiber",
+      "unit": "g/day",
+      "description": "Indigestible part of plant foods that aids digestion and supports gut health.",
+      "benefits": "Promotes healthy digestion, lowers cholesterol, helps control blood sugar.",
+      "deficiencyEffects": "Constipation, higher risk of heart disease and type 2 diabetes.",
+      "excessEffects": "Digestive discomfort, nutrient absorption interference.",
+      "rda": [
+        {
+          "ageRange": "19-30 male",
+          "activityLevel": "moderate",
+          "value": 38
+        },
+        {
+          "ageRange": "19-30 female",
+          "activityLevel": "moderate",
+          "value": 25
+        }
+      ],
+      "ul": null,
+      "source": "WHO Fiber Intake Recommendations – Adapted for African diets"
+    },
+    {
+      "nutrient": "Sugar",
+      "unit": "g/day",
+      "description": "Simple carbohydrate that provides quick energy but lacks essential nutrients.",
+      "benefits": "Quick energy source, enhances taste of foods.",
+      "deficiencyEffects": "No direct deficiency effects; body can produce glucose from other sources.",
+      "excessEffects": "Tooth decay, weight gain, increased risk of diabetes and heart disease.",
+      "rda": [
+        {
+          "ageRange": "19-30 male",
+          "activityLevel": "moderate",
+          "value": 25
+        },
+        {
+          "ageRange": "19-30 female",
+          "activityLevel": "moderate",
+          "value": 25
+        }
+      ],
+      "ul": 50,
+      "source": "WHO Free Sugar Intake Guidelines"
+    },
+    {
+      "nutrient": "Calcium",
+      "unit": "mg/day",
+      "description": "Mineral essential for bone health, muscle function, and nerve signaling.",
+      "benefits": "Builds strong bones and teeth, supports muscle contraction and nerve transmission.",
+      "deficiencyEffects": "Osteoporosis, brittle nails, muscle cramps.",
+      "excessEffects": "Kidney stones, impaired absorption of other minerals.",
+      "rda": [
+        {
+          "ageRange": "19-30 male",
+          "activityLevel": "moderate",
+          "value": 1000
+        },
+        {
+          "ageRange": "19-30 female",
+          "activityLevel": "moderate",
+          "value": 1000
+        }
+      ],
+      "ul": 2500,
+      "source": "WHO/FAO Calcium Requirements – Adapted for African diets"
+    },
+    {
+      "nutrient": "Potassium",
+      "unit": "mg/day",
+      "description": "Electrolyte that helps regulate fluid balance, muscle contractions, and nerve signals.",
+      "benefits": "Supports heart health, lowers blood pressure, aids muscle function.",
+      "deficiencyEffects": "Weakness, muscle cramps, irregular heartbeat.",
+      "excessEffects": "Hyperkalemia (especially in kidney disease), which can cause heart problems.",
+      "rda": [
+        {
+          "ageRange": "19-30 male",
+          "activityLevel": "moderate",
+          "value": 3400
+        },
+        {
+          "ageRange": "19-30 female",
+          "activityLevel": "moderate",
+          "value": 2600
+        }
+      ],
+      "ul": null,
+      "source": "WHO Potassium Intake Guidelines – Adapted for West Africa"
+    }
+  ]
+}

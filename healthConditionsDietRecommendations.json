@@ -1,0 +1,132 @@
+{
+  "healthConditionsDietRecommendations": [
+    {
+      "condition": "Diabetes",
+      "description": "Chronic condition affecting blood sugar regulation.",
+      "dietGoals": [
+        "Maintain stable blood sugar levels",
+        "Promote heart health",
+        "Prevent nutrient deficiencies"
+      ],
+      "nutrientAdjustments": [
+        { "nutrient": "Carbohydrates", "recommendation": "Focus on complex carbs with low glycemic index; limit refined sugars", "targetRange": "45-55% of daily energy" },
+        { "nutrient": "Fiber", "recommendation": "Increase intake from whole grains, beans, vegetables", "targetRange": "25-30g/day" },
+        { "nutrient": "Sodium", "recommendation": "Limit to prevent hypertension risk", "targetRange": "< 2000mg/day" }
+      ],
+      "recommendedMeals": [
+        "Waakye (with reduced oil)",
+        "Red Red (moderate portion, served with boiled plantain)",
+        "Oat Porridge without added sugar",
+        "Vegetable Stew with minimal oil"
+      ],
+      "avoidMeals": [
+        "Kelewele",
+        "Bofrot",
+        "Sweetened chocolate drink",
+        "Carbonated drinks"
+      ],
+      "source": "WHO and Ghana Health Service diabetes dietary guidelines"
+    },
+    {
+      "condition": "Hypertension",
+      "description": "High blood pressure condition increasing risk of heart disease and stroke.",
+      "dietGoals": [
+        "Reduce sodium intake",
+        "Increase potassium intake",
+        "Maintain healthy body weight"
+      ],
+      "nutrientAdjustments": [
+        { "nutrient": "Sodium", "recommendation": "Reduce to lower blood pressure", "targetRange": "< 1500mg/day" },
+        { "nutrient": "Potassium", "recommendation": "Increase through fruits, vegetables, legumes", "targetRange": "3500-4700mg/day" }
+      ],
+      "recommendedMeals": [
+        "Boiled Yam with vegetable stew",
+        "Banku with okro stew (low salt)",
+        "Light Soup with fish and vegetables",
+        "Fruit-based snacks instead of fried foods"
+      ],
+      "avoidMeals": [
+        "Shitor (high salt/oil)",
+        "Palm Nut Soup (excess oil)",
+        "Salted dried fish dishes",
+        "Highly processed snacks"
+      ],
+      "source": "WHO hypertension dietary guidelines adapted for Ghana"
+    },
+    {
+      "condition": "Iron-Deficiency Anemia",
+      "description": "Condition marked by low iron levels, reducing oxygen transport in the blood.",
+      "dietGoals": [
+        "Increase iron-rich foods",
+        "Improve iron absorption",
+        "Address any underlying causes"
+      ],
+      "nutrientAdjustments": [
+        { "nutrient": "Iron", "recommendation": "Increase intake of heme iron from meat and fish; combine plant-based iron sources with vitamin C", "targetRange": "Male: 8mg/day, Female: 18mg/day" },
+        { "nutrient": "Vitamin C", "recommendation": "Increase to improve non-heme iron absorption", "targetRange": "75-90mg/day" }
+      ],
+      "recommendedMeals": [
+        "Waakye with beef or fish and vegetable stew",
+        "Red Red with boiled plantain and fresh pepper sauce",
+        "Fufu with light soup containing goat meat",
+        "Groundnut Soup with leafy greens"
+      ],
+      "avoidMeals": [
+        "Tea or coffee with meals (reduces iron absorption)",
+        "Highly processed refined bread without fortification"
+      ],
+      "source": "Ghana Health Service anemia management protocol"
+    },
+    {
+      "condition": "Obesity",
+      "description": "Excess body fat accumulation posing health risks.",
+      "dietGoals": [
+        "Reduce total calorie intake",
+        "Increase physical activity",
+        "Improve nutrient density of meals"
+      ],
+      "nutrientAdjustments": [
+        { "nutrient": "Energy", "recommendation": "Reduce daily calorie intake by 500-750 kcal for gradual weight loss", "targetRange": "Male: 2000-2200 kcal/day, Female: 1500-1700 kcal/day" },
+        { "nutrient": "Fat", "recommendation": "Limit saturated fat; focus on healthy fats", "targetRange": "< 30% of daily energy" }
+      ],
+      "recommendedMeals": [
+        "Oat porridge with fruit",
+        "Boiled yam with vegetable stew",
+        "Grilled fish with steamed vegetables",
+        "Banku with light okro soup"
+      ],
+      "avoidMeals": [
+        "Kelewele",
+        "Bofrot",
+        "Shitor in large amounts",
+        "Palm Nut Soup with excess oil"
+      ],
+      "source": "WHO weight management dietary guidelines"
+    },
+    {
+      "condition": "Chronic Kidney Disease",
+      "description": "Gradual loss of kidney function over time.",
+      "dietGoals": [
+        "Reduce kidney workload",
+        "Control blood pressure",
+        "Prevent further damage"
+      ],
+      "nutrientAdjustments": [
+        { "nutrient": "Protein", "recommendation": "Moderate protein intake, focusing on high-quality sources", "targetRange": "0.6-0.8 g/kg body weight/day" },
+        { "nutrient": "Sodium", "recommendation": "Reduce to control blood pressure", "targetRange": "< 1500mg/day" },
+        { "nutrient": "Potassium", "recommendation": "Limit if blood potassium levels are high", "targetRange": "Individualized" }
+      ],
+      "recommendedMeals": [
+        "Plain cooked rice with vegetable stew",
+        "Boiled plantain with garden egg stew",
+        "Grilled chicken with cabbage salad"
+      ],
+      "avoidMeals": [
+        "High-salt soups and stews",
+        "Dried salted fish",
+        "Palm Nut Soup (high in potassium if taken with certain vegetables)"
+      ],
+      "source": "Ghana Health Service CKD nutrition recommendations"
+    }
+  ]
+}

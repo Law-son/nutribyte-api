@@ -3,9 +3,8 @@ const MealLog = require('../models/meallog.model');
 const Analysis = require('../models/analysis.model');
 const UserProfile = require('../models/profile.model');
 
-// Langflow API configuration
-const LANGFLOW_API_URL = 'https://api.langflow.astra.datastax.com/lf/38dccd86-de59-4001-b993-6d2eb72a7279/api/v1/run/c8a36d56-21c0-4e64-8c27-693e816c9840';
-const APPLICATION_TOKEN = process.env.APPLICATION_TOKEN;
+// Custom AI API configuration
+const CUSTOM_AI_API_URL = 'https://rag-health.onrender.com/chat';
 
 const calculateNutrientTotalsAndAverages = (mealLogs, daysInPeriod) => {
     const totals = {
@@ -186,56 +185,67 @@ const analyzeTrends = async (userId, currentPeriod, currentNutrients) => {
     }
 };
 
-// Real AI analysis using Langflow API for reports
+// Real AI analysis using Custom AI API for reports
 const generateAIReportAnalysis = async (reportData, userProfile, period) => {
     try {
-        const analysisInput = {
-            reportType: 'comprehensive_report',
-            period,
-            userProfile: {
-                age: userProfile.age,
-                gender: userProfile.gender,
-                weight: userProfile.weight,
-                height: userProfile.height,
-                activenessLevel: userProfile.activenessLevel,
-                weightGoal: userProfile.weightGoal,
-                healthConditions: userProfile.healthConditions || []
-            },
-            nutritionalData: {
-                currentNutrients: reportData.nutrientBreakdown,
-                goalProgress: reportData.goalProgress,
-                trends: reportData.trends,
-                mealPatterns: reportData.analytics
-            },
-            analysisRequirements: [
-                'comprehensive_nutritional_assessment',
-                'goal_progress_evaluation',
-                'trend_analysis_insights',
-                'personalized_recommendations',
-                'health_condition_specific_advice'
-            ]
-        };
+        // Format the data as a readable string for the AI
+        const analysisText = `
+Comprehensive Nutritional Report Analysis for ${period} period:
+
+User Profile:
+- Age: ${userProfile.age}
+- Gender: ${userProfile.gender}
+- Weight: ${userProfile.weight}kg
+- Height: ${userProfile.height}m
+- Activity Level: ${userProfile.activenessLevel}
+- Weight Goal: ${userProfile.weightGoal || 'maintain'}
+- Health Conditions: ${userProfile.healthConditions?.join(', ') || 'None'}
+
+${period} Period Nutrient Totals:
+- Calories: ${reportData.nutrientBreakdown.calories.toFixed(2)}
+- Protein: ${reportData.nutrientBreakdown.protein.toFixed(2)}g
+- Fat: ${reportData.nutrientBreakdown.fat.toFixed(2)}g
+- Carbohydrates: ${reportData.nutrientBreakdown.carbs.toFixed(2)}g
+- Fiber: ${reportData.nutrientBreakdown.fiber.toFixed(2)}g
+- Sugar: ${reportData.nutrientBreakdown.sugar.toFixed(2)}g
+- Sodium: ${reportData.nutrientBreakdown.sodium.toFixed(2)}mg
+- Calcium: ${reportData.nutrientBreakdown.calcium.toFixed(2)}mg
+- Iron: ${reportData.nutrientBreakdown.iron.toFixed(2)}mg
+- Potassium: ${reportData.nutrientBreakdown.potassium.toFixed(2)}mg
+- Vitamin C: ${reportData.nutrientBreakdown.vitaminC.toFixed(2)}mg
+
+Goal Progress Data: ${JSON.stringify(reportData.goalProgress, null, 2)}
+Trend Analysis: ${JSON.stringify(reportData.trends, null, 2)}
+Meal Analytics: ${JSON.stringify(reportData.analytics, null, 2)}
+
+Please provide a comprehensive nutritional report analysis including:
+1. Summary of the period
+2. Nutritional assessment
+3. Goal progress insights
+4. Trend analysis insights
+5. Personalized recommendations
+6. Health condition specific advice
+7. Action items for improvement
+
+Respond in JSON format with these fields: summary, nutritionalAssessment, goalProgressInsights, trendInsights, personalizedRecommendations, healthConditionAdvice, actionItems.
+        `.trim();
 
         const payload = {
-            input_value: JSON.stringify(analysisInput),
-            output_type: "json",
-            input_type: "chat",
-            session_id: `user_${userProfile.userId}_report_${Date.now()}`
+            query: analysisText
         };
 
         const options = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${APPLICATION_TOKEN}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(payload)
         };
 
-        const response = await fetch(LANGFLOW_API_URL, options);
+        const response = await fetch(CUSTOM_AI_API_URL, options);
         
         if (!response.ok) {
-            throw new Error(`Langflow API error: ${response.status} ${response.statusText}`);
+            throw new Error(`Custom AI API error: ${response.status} ${response.statusText}`);
         }
 
         const result = await response.json();
@@ -245,8 +255,6 @@ const generateAIReportAnalysis = async (reportData, userProfile, period) => {
         try {
             if (typeof result === 'string') {
                 aiAnalysis = JSON.parse(result);
-            } else if (result.data && typeof result.data === 'string') {
-                aiAnalysis = JSON.parse(result.data);
             } else {
                 aiAnalysis = result;
             }
@@ -279,7 +287,7 @@ const generateAIReportAnalysis = async (reportData, userProfile, period) => {
         };
 
     } catch (error) {
-        console.error('Error calling Langflow API for report analysis:', error);
+        console.error('Error calling Custom AI API for report analysis:', error);
         // Fallback to comprehensive analysis if AI fails
         return {
             summary: "Comprehensive nutritional report analysis completed",

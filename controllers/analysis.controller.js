@@ -3,9 +3,8 @@ const MealLog = require('../models/meallog.model');
 const UserProfile = require('../models/profile.model');
 const Meal = require('../models/meal.model');
 
-// Langflow API configuration
-const LANGFLOW_API_URL = 'https://api.langflow.astra.datastax.com/lf/38dccd86-de59-4001-b993-6d2eb72a7279/api/v1/run/c8a36d56-21c0-4e64-8c27-693e816c9840';
-const APPLICATION_TOKEN = process.env.APPLICATION_TOKEN;
+// Custom AI API configuration
+const CUSTOM_AI_API_URL = 'https://rag-health.onrender.com/chat';
 
 const calculateNutrientTotals = (mealLogs) => {
     const totals = {
@@ -71,7 +70,7 @@ const calculateNutrientTotals = (mealLogs) => {
     return totals;
 };
 
-// Real AI analysis using Langflow API
+// Real AI analysis using Custom AI API
 const generateAIAnalysis = async (nutrientTotals, userProfile, period, mealLogs) => {
     try {
         // Format the data as a readable string for the AI
@@ -115,62 +114,34 @@ Respond in JSON format with these fields: analysisSummary, recommendations, nutr
         `.trim();
 
         const payload = {
-            input_value: analysisText,
-            output_type: "chat",
-            input_type: "chat",
-            session_id: `user_${userProfile.userId}_${Date.now()}`
+            query: analysisText
         };
 
-        console.log(`[AI Analysis] Sending payload to Langflow API for ${period} analysis:`, payload);
+        console.log(`[AI Analysis] Sending payload to Custom AI API for ${period} analysis:`, payload);
 
         const options = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${APPLICATION_TOKEN}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(payload)
         };
 
-        const response = await fetch(LANGFLOW_API_URL, options);
+        const response = await fetch(CUSTOM_AI_API_URL, options);
         
         if (!response.ok) {
-            throw new Error(`Langflow API error: ${response.status} ${response.statusText}`);
+            throw new Error(`Custom AI API error: ${response.status} ${response.statusText}`);
         }
 
         const result = await response.json();
-        // Improved logging: print the full, expanded response for clarity
-        console.log(`[AI Analysis] Raw Langflow API response for ${period} analysis:`);
-        console.dir(result, { depth: null, colors: true });
+        console.log(`[AI Analysis] Raw Custom AI API response for ${period} analysis:`, result);
 
-        // Try to extract the actual AI output from the nested structure
+        // Parse the AI response
         let aiAnalysis;
         try {
-            // Langflow 1.0+ returns outputs in a nested array structure
-            let outputString = null;
-            if (result && Array.isArray(result.outputs) && result.outputs.length > 0) {
-                // Try to find a string output in the nested outputs
-                const outputsArr = result.outputs[0].outputs;
-                if (Array.isArray(outputsArr)) {
-                    for (const out of outputsArr) {
-                        if (typeof out === 'string') {
-                            outputString = out;
-                            break;
-                        } else if (out && typeof out === 'object' && out.text) {
-                            outputString = out.text;
-                            break;
-                        }
-                    }
-                }
-            }
-            if (!outputString && result.data && typeof result.data === 'string') {
-                outputString = result.data;
-            }
-            if (!outputString && typeof result === 'string') {
-                outputString = result;
-            }
-            if (outputString) {
-                aiAnalysis = JSON.parse(outputString);
+            // The custom AI API should return the response directly
+            if (typeof result === 'string') {
+                aiAnalysis = JSON.parse(result);
             } else {
                 aiAnalysis = result;
             }
@@ -200,7 +171,7 @@ Respond in JSON format with these fields: analysisSummary, recommendations, nutr
         return finalResponse;
 
     } catch (error) {
-        console.error('Error calling Langflow API:', error);
+        console.error('Error calling Custom AI API:', error);
         // Fallback to basic analysis if AI fails
         return {
             analysisSummary: "Analysis completed with basic insights",
@@ -364,53 +335,33 @@ Respond in JSON format with these fields: analysisSummary, recommendations, nutr
         `.trim();
 
         const payload = {
-            input_value: analysisText,
-            output_type: "chat",
-            input_type: "chat",
-            session_id: `user_${userProfile.userId}_daily_${Date.now()}`
+            query: analysisText
         };
 
-        console.log(`[AI Analysis] Sending payload to Langflow API:`, payload);
+        console.log(`[AI Analysis] Sending payload to Custom AI API:`, payload);
 
         const options = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${APPLICATION_TOKEN}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(payload)
         };
 
-        const response = await fetch(LANGFLOW_API_URL, options);
+        const response = await fetch(CUSTOM_AI_API_URL, options);
         
         if (!response.ok) {
-            throw new Error(`Langflow API error: ${response.status} ${response.statusText}`);
+            throw new Error(`Custom AI API error: ${response.status} ${response.statusText}`);
         }
 
         const result = await response.json();
-        console.log(`[AI Analysis] Langflow API response:`, result);
+        console.log(`[AI Analysis] Custom AI API response:`, result);
         
         let aiAnalysis;
         try {
-            // Handle the new Langflow API response format
-            if (result.outputs && result.outputs.length > 0 && result.outputs[0].outputs) {
-                const outputData = result.outputs[0].outputs;
-                if (outputData.length > 0 && outputData[0].data) {
-                    // Try to parse the data field
-                    if (typeof outputData[0].data === 'string') {
-                        aiAnalysis = JSON.parse(outputData[0].data);
-                    } else {
-                        aiAnalysis = outputData[0].data;
-                    }
-                } else {
-                    // Fallback: try to parse the entire output
-                    const outputText = JSON.stringify(outputData);
-                    aiAnalysis = JSON.parse(outputText);
-                }
-            } else if (typeof result === 'string') {
+            // The custom AI API should return the response directly
+            if (typeof result === 'string') {
                 aiAnalysis = JSON.parse(result);
-            } else if (result.data && typeof result.data === 'string') {
-                aiAnalysis = JSON.parse(result.data);
             } else {
                 aiAnalysis = result;
             }
@@ -437,7 +388,7 @@ Respond in JSON format with these fields: analysisSummary, recommendations, nutr
         };
 
     } catch (error) {
-        console.error('Error calling Langflow API for daily analysis:', error);
+        console.error('Error calling Custom AI API for daily analysis:', error);
         return {
             analysisSummary: "Daily nutritional analysis completed",
             recommendations: ["Continue monitoring your nutrition", "Stay hydrated"],

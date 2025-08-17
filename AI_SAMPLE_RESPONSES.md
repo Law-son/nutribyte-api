@@ -1,6 +1,6 @@
 # AI Integration Sample JSON Responses
 
-This document contains sample JSON responses for all AI integrations in the NutriByte API codebase. The AI uses the Langflow API for nutritional analysis and reporting.
+This document contains sample JSON responses for all AI integrations in the NutriByte API codebase. The AI uses the Custom AI API for nutritional analysis and reporting.
 
 ## 1. Analysis Controller AI Responses
 
@@ -11,10 +11,7 @@ This document contains sample JSON responses for all AI integrations in the Nutr
 #### Sample Request Payload:
 ```json
 {
-  "input_value": "Nutritional Analysis Request for week period:\n\nUser Profile:\n- Age: 28\n- Gender: Female\n- Weight: 65kg\n- Height: 1.65m\n- Activity Level: Moderate\n- Weight Goal: maintain\n- Health Conditions: None\n\nWeek Period Nutrient Totals:\n- Calories: 1250.50\n- Protein: 45.20g\n- Fat: 35.80g\n- Carbohydrates: 180.30g\n- Fiber: 22.50g\n- Sugar: 45.20g\n- Sodium: 2100.00mg\n- Calcium: 850.00mg\n- Iron: 12.50mg\n- Potassium: 2800.00mg\n- Vitamin C: 65.00mg\n\nMeals Consumed:\n- Mon Dec 16 2024: Jollof Rice, Grilled Chicken\n- Tue Dec 17 2024: Banku with Okro Soup\n- Wed Dec 18 2024: Fufu with Light Soup\n\nPlease provide a comprehensive nutritional analysis including:\n1. Analysis summary\n2. Recommendations for improvement\n3. Nutritional deficiencies detected\n4. Nutritional excesses detected\n5. Potential health risks\n6. Positive points about the diet\n\nRespond in JSON format with these fields: analysisSummary, recommendations, nutritionalDeficiencies, nutritionalExcesses, healthRisks, positivePoints.",
-  "output_type": "chat",
-  "input_type": "chat",
-  "session_id": "user_123_1703123456789"
+  "query": "Nutritional Analysis Request for week period:\n\nUser Profile:\n- Age: 28\n- Gender: Female\n- Weight: 65kg\n- Height: 1.65m\n- Activity Level: Moderate\n- Weight Goal: maintain\n- Health Conditions: None\n\nWeek Period Nutrient Totals:\n- Calories: 1250.50\n- Protein: 45.20g\n- Fat: 35.80g\n- Carbohydrates: 180.30g\n- Fiber: 22.50g\n- Sugar: 45.20g\n- Sodium: 2100.00mg\n- Calcium: 850.00mg\n- Iron: 12.50mg\n- Potassium: 2800.00mg\n- Vitamin C: 65.00mg\n\nMeals Consumed:\n- Mon Dec 16 2024: Jollof Rice, Grilled Chicken\n- Tue Dec 17 2024: Banku with Okro Soup\n- Wed Dec 18 2024: Fufu with Light Soup\n\nPlease provide a comprehensive nutritional analysis including:\n1. Analysis summary\n2. Recommendations for improvement\n3. Nutritional deficiencies detected\n4. Nutritional excesses detected\n5. Potential health risks\n6. Positive points about the diet\n\nRespond in JSON format with these fields: analysisSummary, recommendations, nutritionalDeficiencies, nutritionalExcesses, healthRisks, positivePoints."
 }
 ```
 
@@ -58,10 +55,7 @@ This document contains sample JSON responses for all AI integrations in the Nutr
 #### Sample Request Payload:
 ```json
 {
-  "input_value": "Daily Nutritional Analysis Request:\n\nUser Profile:\n- Age: 28\n- Gender: Female\n- Weight: 65kg\n- Height: 1.65m\n- Activity Level: Moderate\n- Weight Goal: maintain\n- Health Conditions: None\n\nToday's Nutrient Intake:\n- Calories: 1850.75\n- Protein: 68.40g\n- Fat: 52.30g\n- Carbohydrates: 245.60g\n- Fiber: 28.90g\n- Sugar: 38.50g\n- Sodium: 1850.00mg\n- Calcium: 950.00mg\n- Iron: 15.20mg\n- Potassium: 3200.00mg\n- Vitamin C: 85.00mg\n\nPlease provide a comprehensive daily nutritional analysis including:\n1. Analysis summary\n2. Recommendations for improvement\n3. Nutritional deficiencies detected\n4. Nutritional excesses detected\n5. Potential health risks\n6. Positive points about the diet\n\nRespond in JSON format with these fields: analysisSummary, recommendations, nutritionalDeficiencies, nutritionalExcesses, healthRisks, positivePoints.",
-  "output_type": "chat",
-  "input_type": "chat",
-  "session_id": "user_123_daily_1703123456789"
+  "query": "Daily Nutritional Analysis Request:\n\nUser Profile:\n- Age: 28\n- Gender: Female\n- Weight: 65kg\n- Height: 1.65m\n- Activity Level: Moderate\n- Weight Goal: maintain\n- Health Conditions: None\n\nToday's Nutrient Intake:\n- Calories: 1850.75\n- Protein: 68.40g\n- Fat: 52.30g\n- Carbohydrates: 245.60g\n- Fiber: 28.90g\n- Sugar: 38.50g\n- Sodium: 1850.00mg\n- Calcium: 950.00mg\n- Iron: 15.20mg\n- Potassium: 3200.00mg\n- Vitamin C: 85.00mg\n\nPlease provide a comprehensive daily nutritional analysis including:\n1. Analysis summary\n2. Recommendations for improvement\n3. Nutritional deficiencies detected\n4. Nutritional excesses detected\n5. Potential health risks\n6. Positive points about the diet\n\nRespond in JSON format with these fields: analysisSummary, recommendations, nutritionalDeficiencies, nutritionalExcesses, healthRisks, positivePoints."
 }
 ```
 
@@ -99,10 +93,7 @@ This document contains sample JSON responses for all AI integrations in the Nutr
 #### Sample Request Payload:
 ```json
 {
-  "input_value": "{\"reportType\":\"comprehensive_report\",\"period\":\"week\",\"userProfile\":{\"age\":28,\"gender\":\"Female\",\"weight\":65,\"height\":1.65,\"activenessLevel\":\"Moderate\",\"weightGoal\":\"maintain\",\"healthConditions\":[]},\"nutritionalData\":{\"currentNutrients\":{\"calories\":8750.25,\"protein\":315.60,\"fat\":245.80,\"carbs\":1260.40,\"fiber\":158.90,\"sugar\":245.60,\"sodium\":12950.00,\"calcium\":6650.00,\"iron\":89.50,\"potassium\":22400.00,\"vitaminC\":595.00},\"goalProgress\":{\"calorieGoal\":1750,\"recommendedNutrients\":{\"calories\":1750,\"protein\":52,\"fat\":48.6,\"carbs\":196.9,\"fiber\":25,\"sugar\":43.8,\"sodium\":2300,\"calcium\":1000,\"iron\":18,\"potassium\":3500,\"vitaminC\":75},\"progress\":{\"calories\":{\"current\":1250,\"recommended\":1750,\"percentage\":71,\"status\":\"Below Target\"},\"protein\":{\"current\":45.1,\"recommended\":52,\"percentage\":87,\"status\":\"On Track\"}}},\"trends\":{\"previousPeriod\":\"3days\",\"previousNutrients\":{\"calories\":3750.50,\"protein\":135.20,\"fat\":105.80,\"carbs\":540.30,\"fiber\":68.50,\"sugar\":105.20,\"sodium\":5550.00,\"calcium\":2850.00,\"iron\":38.50,\"potassium\":9600.00,\"vitaminC\":255.00},\"trends\":{\"calories\":{\"change\":133.33,\"trend\":\"Increasing\",\"direction\":\"up\"},\"protein\":{\"change\":133.33,\"trend\":\"Increasing\",\"direction\":\"up\"}}},\"mealPatterns\":{\"mostEatenMeal\":\"Jollof Rice\",\"leastEatenMeal\":\"Banku with Okro Soup\",\"mealCounts\":{\"Jollof Rice\":5,\"Grilled Chicken\":4,\"Fufu with Light Soup\":3,\"Banku with Okro Soup\":2,\"Red Red\":1}}},\"analysisRequirements\":[\"comprehensive_nutritional_assessment\",\"goal_progress_evaluation\",\"trend_analysis_insights\",\"personalized_recommendations\",\"health_condition_specific_advice\"]}",
-  "output_type": "json",
-  "input_type": "chat",
-  "session_id": "user_123_report_1703123456789"
+  "query": "Comprehensive Nutritional Report Analysis for week period:\n\nUser Profile:\n- Age: 28\n- Gender: Female\n- Weight: 65kg\n- Height: 1.65m\n- Activity Level: Moderate\n- Weight Goal: maintain\n- Health Conditions: None\n\nWeek Period Nutrient Totals:\n- Calories: 8750.25\n- Protein: 315.60g\n- Fat: 245.80g\n- Carbohydrates: 1260.40g\n- Fiber: 158.90g\n- Sugar: 245.60g\n- Sodium: 12950.00mg\n- Calcium: 6650.00mg\n- Iron: 89.50mg\n- Potassium: 22400.00mg\n- Vitamin C: 595.00mg\n\nGoal Progress Data: {\"calorieGoal\":1750,\"recommendedNutrients\":{\"calories\":1750,\"protein\":52,\"fat\":48.6,\"carbs\":196.9,\"fiber\":25,\"sugar\":43.8,\"sodium\":2300,\"calcium\":1000,\"iron\":18,\"potassium\":3500,\"vitaminC\":75},\"progress\":{\"calories\":{\"current\":1250,\"recommended\":1750,\"percentage\":71,\"status\":\"Below Target\"},\"protein\":{\"current\":45.1,\"recommended\":52,\"percentage\":87,\"status\":\"On Track\"}}}\nTrend Analysis: {\"previousPeriod\":\"3days\",\"previousNutrients\":{\"calories\":3750.50,\"protein\":135.20,\"fat\":105.80,\"carbs\":540.30,\"fiber\":68.50,\"sugar\":105.20,\"sodium\":5550.00,\"calcium\":2850.00,\"iron\":38.50,\"potassium\":9600.00,\"vitaminC\":255.00},\"trends\":{\"calories\":{\"change\":133.33,\"trend\":\"Increasing\",\"direction\":\"up\"},\"protein\":{\"change\":133.33,\"trend\":\"Increasing\",\"direction\":\"up\"}}}\nMeal Analytics: {\"mostEatenMeal\":\"Jollof Rice\",\"leastEatenMeal\":\"Banku with Okro Soup\",\"mealCounts\":{\"Jollof Rice\":5,\"Grilled Chicken\":4,\"Fufu with Light Soup\":3,\"Banku with Okro Soup\":2,\"Red Red\":1}}\n\nPlease provide a comprehensive nutritional report analysis including:\n1. Summary of the period\n2. Nutritional assessment\n3. Goal progress insights\n4. Trend analysis insights\n5. Personalized recommendations\n6. Health condition specific advice\n7. Action items for improvement\n\nRespond in JSON format with these fields: summary, nutritionalAssessment, goalProgressInsights, trendInsights, personalizedRecommendations, healthConditionAdvice, actionItems."
 }
 ```
 
@@ -187,17 +178,15 @@ When the AI service is unavailable or returns an error:
 
 ## 4. API Configuration
 
-### 4.1 Langflow API Configuration
+### 4.1 Custom AI API Configuration
 ```javascript
-const LANGFLOW_API_URL = 'https://api.langflow.astra.datastax.com/lf/38dccd86-de59-4001-b993-6d2eb72a7279/api/v1/run/c8a36d56-21c0-4e64-8c27-693e816c9840';
-const APPLICATION_TOKEN = process.env.APPLICATION_TOKEN;
+const CUSTOM_AI_API_URL = 'https://rag-health.onrender.com/chat';
 ```
 
 ### 4.2 Request Headers
 ```javascript
 {
-  'Content-Type': 'application/json',
-  'Authorization': `Bearer ${APPLICATION_TOKEN}`
+  'Content-Type': 'application/json'
 }
 ```
 
@@ -215,7 +204,7 @@ The AI responses are processed to ensure they follow the expected format:
 
 1. **User Request** → Controller receives analysis/report request
 2. **Data Preparation** → User profile and nutritional data are formatted
-3. **AI Request** → Formatted data is sent to Langflow API
+3. **AI Request** → Formatted data is sent to Custom AI API
 4. **Response Processing** → AI response is parsed and validated
 5. **Fallback Handling** → If AI fails, fallback response is used
 6. **User Response** → Processed data is returned to user

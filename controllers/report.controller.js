@@ -3,8 +3,9 @@ const MealLog = require('../models/meallog.model');
 const Analysis = require('../models/analysis.model');
 const UserProfile = require('../models/profile.model');
 
-// Custom AI API configuration
-const CUSTOM_AI_API_URL = 'https://rag-health.onrender.com/chat';
+// Import AI API client with timeout configuration
+const { makeAIRequest } = require('../utils/aiApiClient');
+const timeoutConfig = require('../config/timeout');
 
 const calculateNutrientTotalsAndAverages = (mealLogs, daysInPeriod) => {
     const totals = {
@@ -234,21 +235,8 @@ Respond in JSON format with these fields: summary, nutritionalAssessment, goalPr
             query: analysisText
         };
 
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        };
-
-        const response = await fetch(CUSTOM_AI_API_URL, options);
-        
-        if (!response.ok) {
-            throw new Error(`Custom AI API error: ${response.status} ${response.statusText}`);
-        }
-
-        const result = await response.json();
+        // Use the AI API client with extended timeout
+        const result = await makeAIRequest(payload, timeoutConfig.aiApiTimeout);
         
         // Parse the AI response and ensure it follows the expected format
         let aiAnalysis;
@@ -319,154 +307,180 @@ const generateReport = async (req, res, next) => {
         const { period } = req.body;
         const userId = req.user.userId;
 
-        // Calculate startDate and endDate based on period
-        const now = new Date();
-        let startDate, endDate;
-        endDate = new Date(now);
-        endDate.setHours(23, 59, 59, 999);
-        
-        const daysInPeriod = {
-            '1day': 1, '3days': 3, 'week': 7, '2weeks': 14, 'month': 30
-        }[period];
+        // Set up streaming response with heartbeats
+        res.setHeader("Content-Type", "application/json; charset=utf-8");
+        res.setHeader("Transfer-Encoding", "chunked");
+        res.flushHeaders?.();
 
-        switch (period) {
-            case '1day':
-                startDate = new Date(now);
-                startDate.setHours(0, 0, 0, 0);
-                break;
-            case '3days':
-                startDate = new Date(now);
-                startDate.setDate(now.getDate() - 2);
-                startDate.setHours(0, 0, 0, 0);
-                break;
-            case 'week':
-                startDate = new Date(now);
-                startDate.setDate(now.getDate() - 6);
-                startDate.setHours(0, 0, 0, 0);
-                break;
-            case '2weeks':
-                startDate = new Date(now);
-                startDate.setDate(now.getDate() - 13);
-                startDate.setHours(0, 0, 0, 0);
-                break;
-            case 'month':
-                startDate = new Date(now);
-                startDate.setMonth(now.getMonth() - 1);
-                startDate.setHours(0, 0, 0, 0);
-                break;
-            default:
-                return res.status(400).json({ success: false, error: { message: 'Invalid period' } });
-        }
+        let heartbeatInterval;
 
-        // Fetch user profile
-        const userProfile = await UserProfile.findOne({ userId });
-        if (!userProfile) {
-            return res.status(404).json({ success: false, error: { message: 'User profile not found. Please complete your profile first.' } });
-        }
+        try {
+            // Send heartbeats every 5 seconds to keep connection alive
+            heartbeatInterval = setInterval(() => {
+                res.write(" "); // Send whitespace chunk as heartbeat
+            }, 5000);
 
-        // Fetch meal logs for the period
-        const mealLogs = await MealLog.find({
-            userId,
-            date: {
-                $gte: startDate,
-                $lte: endDate
+            // Calculate startDate and endDate based on period
+            const now = new Date();
+            let startDate, endDate;
+            endDate = new Date(now);
+            endDate.setHours(23, 59, 59, 999);
+            
+            const daysInPeriod = {
+                '1day': 1, '3days': 3, 'week': 7, '2weeks': 14, 'month': 30
+            }[period];
+
+            switch (period) {
+                case '1day':
+                    startDate = new Date(now);
+                    startDate.setHours(0, 0, 0, 0);
+                    break;
+                case '3days':
+                    startDate = new Date(now);
+                    startDate.setDate(now.getDate() - 2);
+                    startDate.setHours(0, 0, 0, 0);
+                    break;
+                case 'week':
+                    startDate = new Date(now);
+                    startDate.setDate(now.getDate() - 6);
+                    startDate.setHours(0, 0, 0, 0);
+                    break;
+                case '2weeks':
+                    startDate = new Date(now);
+                    startDate.setDate(now.getDate() - 13);
+                    startDate.setHours(0, 0, 0, 0);
+                    break;
+                case 'month':
+                    startDate = new Date(now);
+                    startDate.setMonth(now.getMonth() - 1);
+                    startDate.setHours(0, 0, 0, 0);
+                    break;
+                default:
+                    clearInterval(heartbeatInterval);
+                    return res.status(400).json({ success: false, error: { message: 'Invalid period' } });
             }
-        }).populate('meals.mealId');
 
-        if (mealLogs.length === 0) {
-            return res.status(404).json({ success: false, error: { message: 'No meal logs found for the specified period' } });
-        }
+            // Fetch user profile
+            const userProfile = await UserProfile.findOne({ userId });
+            if (!userProfile) {
+                clearInterval(heartbeatInterval);
+                return res.status(404).json({ success: false, error: { message: 'User profile not found. Please complete your profile first.' } });
+            }
 
-        // Calculate nutrient totals and averages
-        const { totals: nutrientBreakdown, dailyAverages } = calculateNutrientTotalsAndAverages(mealLogs, daysInPeriod);
+            // Fetch meal logs for the period
+            const mealLogs = await MealLog.find({
+                userId,
+                date: {
+                    $gte: startDate,
+                    $lte: endDate
+                }
+            }).populate('meals.mealId');
 
-        // Calculate goal progress
-        const goalProgress = await calculateGoalProgress(userId, nutrientBreakdown, period);
+            if (mealLogs.length === 0) {
+                clearInterval(heartbeatInterval);
+                return res.status(404).json({ success: false, error: { message: 'No meal logs found for the specified period' } });
+            }
 
-        // Analyze trends over time
-        const trends = await analyzeTrends(userId, period, nutrientBreakdown);
+            // Calculate nutrient totals and averages
+            const { totals: nutrientBreakdown, dailyAverages } = calculateNutrientTotalsAndAverages(mealLogs, daysInPeriod);
 
-        // Meal frequency analysis
-        const mealCountMap = {};
-        mealLogs.forEach(log => {
-            log.meals.forEach(meal => {
-                const mealName = meal.mealId?.name || 'Unknown';
-                mealCountMap[mealName] = (mealCountMap[mealName] || 0) + 1;
+            // Calculate goal progress
+            const goalProgress = await calculateGoalProgress(userId, nutrientBreakdown, period);
+
+            // Analyze trends over time
+            const trends = await analyzeTrends(userId, period, nutrientBreakdown);
+
+            // Meal frequency analysis
+            const mealCountMap = {};
+            mealLogs.forEach(log => {
+                log.meals.forEach(meal => {
+                    const mealName = meal.mealId?.name || 'Unknown';
+                    mealCountMap[mealName] = (mealCountMap[mealName] || 0) + 1;
+                });
             });
-        });
 
-        const sortedMeals = Object.entries(mealCountMap).sort((a, b) => b[1] - a[1]);
-        const mostEatenMeal = sortedMeals[0]?.[0] || null;
-        const leastEatenMeal = sortedMeals[sortedMeals.length - 1]?.[0] || null;
-        const top5MealCounts = Object.fromEntries(sortedMeals.slice(0, 5));
+            const sortedMeals = Object.entries(mealCountMap).sort((a, b) => b[1] - a[1]);
+            const mostEatenMeal = sortedMeals[0]?.[0] || null;
+            const leastEatenMeal = sortedMeals[sortedMeals.length - 1]?.[0] || null;
+            const top5MealCounts = Object.fromEntries(sortedMeals.slice(0, 5));
 
-        // Generate AI analysis
-        const aiAnalysis = await generateAIReportAnalysis({
-            nutrientBreakdown,
-            goalProgress,
-            trends,
-            analytics: { mostEatenMeal, leastEatenMeal, mealCounts: top5MealCounts }
-        }, userProfile, period);
+            // Generate AI analysis
+            const aiAnalysis = await generateAIReportAnalysis({
+                nutrientBreakdown,
+                goalProgress,
+                trends,
+                analytics: { mostEatenMeal, leastEatenMeal, mealCounts: top5MealCounts }
+            }, userProfile, period);
 
-        // Prepare analytics data
-        const analyticsData = {
-            mostEatenMeal,
-            leastEatenMeal,
-            mealCounts: top5MealCounts,
-            totalMeals: mealLogs.reduce((sum, log) => sum + log.meals.length, 0),
-            averageMealsPerDay: (mealLogs.reduce((sum, log) => sum + log.meals.length, 0) / daysInPeriod).toFixed(1)
-        };
+            // Prepare analytics data
+            const analyticsData = {
+                mostEatenMeal,
+                leastEatenMeal,
+                mealCounts: top5MealCounts,
+                totalMeals: mealLogs.reduce((sum, log) => sum + log.meals.length, 0),
+                averageMealsPerDay: (mealLogs.reduce((sum, log) => sum + log.meals.length, 0) / daysInPeriod).toFixed(1)
+            };
 
-        // Save report to database for future reference
-        const savedReport = await Report.create({
-            userId,
-            startDate,
-            endDate,
-            period,
-            mealLogs: mealLogs.map(log => log._id),
-            totalNutrients: nutrientBreakdown,
-            dailyAverages,
-            goalProgress,
-            trends,
-            analytics: analyticsData,
-            aiAnalysis,
-            summary: aiAnalysis.summary,
-            recommendations: aiAnalysis.personalizedRecommendations,
-            healthInsights: aiAnalysis.healthConditionAdvice
-        });
-
-        // Create comprehensive report response
-        const reportData = {
-            reportId: savedReport._id,
-            period,
-            dateRange: {
-                start: startDate,
-                end: endDate,
-                days: daysInPeriod
-            },
-            profile: {
-                age: userProfile.age,
-                gender: userProfile.gender,
-                weight: userProfile.weight,
-                height: userProfile.height,
-                activenessLevel: userProfile.activenessLevel,
-                weightGoal: userProfile.weightGoal,
-                healthConditions: userProfile.healthConditions || []
-            },
-            nutritionalData: {
-                breakdown: nutrientBreakdown,
+            // Save report to database for future reference
+            const savedReport = await Report.create({
+                userId,
+                startDate,
+                endDate,
+                period,
+                mealLogs: mealLogs.map(log => log._id),
+                totalNutrients: nutrientBreakdown,
                 dailyAverages,
                 goalProgress,
-                trends
-            },
-            analytics: analyticsData,
-            aiAnalysis
-        };
+                trends,
+                analytics: analyticsData,
+                aiAnalysis,
+                summary: aiAnalysis.summary,
+                recommendations: aiAnalysis.personalizedRecommendations,
+                healthInsights: aiAnalysis.healthConditionAdvice
+            });
 
-        res.status(200).json({
-            success: true,
-            data: reportData
-        });
+            // Create comprehensive report response
+            const reportData = {
+                reportId: savedReport._id,
+                period,
+                dateRange: {
+                    start: startDate,
+                    end: endDate,
+                    days: daysInPeriod
+                },
+                profile: {
+                    age: userProfile.age,
+                    gender: userProfile.gender,
+                    weight: userProfile.weight,
+                    height: userProfile.height,
+                    activenessLevel: userProfile.activenessLevel,
+                    weightGoal: userProfile.weightGoal,
+                    healthConditions: userProfile.healthConditions || []
+                },
+                nutritionalData: {
+                    breakdown: nutrientBreakdown,
+                    dailyAverages,
+                    goalProgress,
+                    trends
+                },
+                analytics: analyticsData,
+                aiAnalysis
+            };
+
+            // Clear heartbeat interval once done
+            clearInterval(heartbeatInterval);
+
+            // Send the final result
+            res.write(JSON.stringify({
+                success: true,
+                data: reportData
+            }));
+            res.end();
+
+        } catch (error) {
+            clearInterval(heartbeatInterval);
+            throw error;
+        }
     } catch (error) {
         next(error);
     }

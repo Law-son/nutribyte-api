@@ -183,11 +183,46 @@ When the AI service is unavailable or returns an error:
 const CUSTOM_AI_API_URL = 'https://rag-health.onrender.com/chat';
 ```
 
-### 4.2 Request Headers
+### 4.2 Timeout Configuration
+```javascript
+// Timeout settings for AI API calls
+const timeoutConfig = {
+    serverTimeout: 300000,      // 5 minutes
+    requestTimeout: 300000,     // 5 minutes
+    aiApiTimeout: 180000,       // 3 minutes
+    fetchTimeout: 120000,       // 2 minutes
+    aiApiRetries: 2,           // Retry attempts
+    jsonLimit: '10mb'          // JSON payload limit
+};
+```
+
+### 4.3 Request Headers
 ```javascript
 {
   'Content-Type': 'application/json'
 }
+```
+
+### 4.4 Environment Variables
+You can configure timeouts using environment variables:
+```bash
+# Server timeout (5 minutes)
+SERVER_TIMEOUT=300000
+
+# Request timeout (5 minutes)
+REQUEST_TIMEOUT=300000
+
+# AI API timeout (3 minutes)
+AI_API_TIMEOUT=180000
+
+# Fetch timeout (2 minutes)
+FETCH_TIMEOUT=120000
+
+# AI API retry attempts
+AI_API_RETRIES=2
+
+# JSON payload size limit
+JSON_LIMIT=10mb
 ```
 
 ## 5. Response Processing
@@ -203,10 +238,33 @@ The AI responses are processed to ensure they follow the expected format:
 ## 6. Data Flow
 
 1. **User Request** → Controller receives analysis/report request
-2. **Data Preparation** → User profile and nutritional data are formatted
-3. **AI Request** → Formatted data is sent to Custom AI API
-4. **Response Processing** → AI response is parsed and validated
-5. **Fallback Handling** → If AI fails, fallback response is used
-6. **User Response** → Processed data is returned to user
+2. **Heartbeat Setup** → Streaming response with periodic heartbeats (every 5 seconds)
+3. **Data Preparation** → User profile and nutritional data are formatted
+4. **AI Request** → Formatted data is sent to Custom AI API
+5. **Response Processing** → AI response is parsed and validated
+6. **Fallback Handling** → If AI fails, fallback response is used
+7. **Final Response** → Heartbeat stops, final data is sent to user
 
-This ensures reliable AI-powered nutritional analysis even when the external AI service experiences issues.
+## 7. Heartbeat Implementation
+
+### 7.1 How Heartbeats Work
+- **Purpose**: Keep client connections alive during long AI API calls
+- **Frequency**: Every 5 seconds
+- **Method**: Sends whitespace chunks via chunked transfer encoding
+- **Cleanup**: Automatically stops when response is complete
+
+### 7.2 Heartbeat Flow
+```
+Client Request → Setup Heartbeat → Process AI Request → Stop Heartbeat → Send Final Response
+     ↓              ↓                    ↓              ↓              ↓
+   Request    Send " " every      AI API Call    Clear Interval   JSON Response
+             5 seconds
+```
+
+### 7.3 Benefits
+- **No Timeouts**: Client connections stay alive indefinitely
+- **Real-time Feedback**: Users know the request is still processing
+- **Automatic Cleanup**: Heartbeats stop when no longer needed
+- **Error Handling**: Heartbeats are properly cleaned up on errors
+
+This ensures reliable AI-powered nutritional analysis with no connection timeouts, even for very long AI API responses.

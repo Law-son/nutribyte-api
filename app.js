@@ -3,6 +3,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const timeoutConfig = require('./config/timeout');
 require('dotenv').config();
 
 // Import routes (we'll create these next)
@@ -21,9 +22,17 @@ const { notFound } = require('./middleware/notFound.middleware');
 
 const app = express();
 
+// Set timeout for all requests
+app.use((req, res, next) => {
+    // Set timeout from configuration
+    req.setTimeout(timeoutConfig.requestTimeout);
+    res.setTimeout(timeoutConfig.requestTimeout);
+    next();
+});
+
 // Basic middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: timeoutConfig.jsonLimit })); // Increase JSON limit for large AI responses
+app.use(express.urlencoded({ extended: true, limit: timeoutConfig.jsonLimit }));
 app.use(cors());
 app.use(helmet());
 app.use(morgan('dev'));

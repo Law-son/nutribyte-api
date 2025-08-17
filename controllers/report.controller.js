@@ -248,19 +248,12 @@ Respond in JSON format with these fields: summary, nutritionalAssessment, goalPr
             }
         } catch (parseError) {
             console.error('Error parsing AI response:', parseError);
-            aiAnalysis = {
-                summary: "AI analysis completed successfully",
-                nutritionalAssessment: "Comprehensive nutritional review completed",
-                goalProgressInsights: "Goal tracking analysis available",
-                trendInsights: "Trend analysis insights provided",
-                personalizedRecommendations: [
-                    "Continue monitoring your nutrition",
-                    "Stay hydrated throughout the day",
-                    "Maintain consistent meal timing"
-                ],
-                healthConditionAdvice: [],
-                actionItems: ["Review your meal planning", "Track progress weekly"]
-            };
+            aiAnalysis = {};
+        }
+
+        // If the response is nested under a 'response' property, use that
+        if (aiAnalysis && aiAnalysis.response) {
+            aiAnalysis = aiAnalysis.response;
         }
 
         // Ensure the response has the expected structure

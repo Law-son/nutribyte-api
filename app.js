@@ -12,7 +12,7 @@ const mealRoutes = require('./routes/meal.routes');
 const mealLogRoutes = require('./routes/meallog.routes');
 const analysisRoutes = require('./routes/analysis.routes');
 const reportRoutes = require('./routes/report.routes');
-const nutritionTipRoutes = require('./routes/nutritionTip.routes');
+const nutritionTipRoutes = require('./routes/nutritiontip.routes');
 const feedbackRoutes = require('./routes/feedback.routes');
 
 // Import error middleware

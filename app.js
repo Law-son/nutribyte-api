@@ -37,6 +37,11 @@ app.use(cors());
 app.use(helmet());
 app.use(morgan('dev'));
 
+
+app.get("/guide.html", (req, res) => {
+    res.sendFile(__dirname + "/guide.html");
+});
+
 // Rate limiting
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes

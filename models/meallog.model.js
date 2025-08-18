@@ -28,7 +28,7 @@ const mealLogSchema = new Schema({
         },
         portionSizeUnit: {
             type: String,
-            enum: ['g', 'kg', 'ml', 'l'],
+            enum: ['g (grams)', 'l (litres)', 'cup', 'piece', 'ladle', 'bowl (small)', 'bowl (medium)', 'bowl (large)', 'ball'],
             default: 'g'
         }
     }]

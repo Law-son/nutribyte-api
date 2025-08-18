@@ -7,7 +7,7 @@ const mealLogSchema = Joi.object({
         Joi.object({
             mealId: Joi.string().required(),
             portionSize: Joi.number().positive().required(),
-            portionSizeUnit: Joi.string().valid('g (grams)', 'l (litres)', 'cup', 'piece', 'ladle', 'bowl (small)', 'bowl (medium)', 'bowl (large)', 'ball').required()
+            portionSizeUnit: Joi.string().valid('g (grams)', 'l (litres)', 'cup', 'piece', 'ladle', 'spoon', 'bowl (small)', 'bowl (medium)', 'bowl (large)', 'ball').required()
         })
     ).min(1).required()
 });

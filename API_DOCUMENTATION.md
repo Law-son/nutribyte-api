@@ -206,7 +206,7 @@ Authorization: Bearer <your_jwt_token>
         {
             "mealId": "meal_id_here",
             "portionSize": 250,
-            "portionSizeUnit": "g"
+            "portionSizeUnit": "g (grams)"
         }
     ]
 }
